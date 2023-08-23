@@ -1,8 +1,8 @@
 {
   "name": "Know Your Barcode",
   "short_name": "Know Your Barcode",
-  "theme_color": "#d8d1f9",
-  "background_color": "#fafafa",
+  "theme_color": "#674ae8",
+  "background_color": "#d8d1f9",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
