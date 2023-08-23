@@ -1,0 +1,2 @@
+<app-barcode-scanner (barcodeDetect)="scannerResult = $event" [frameRate]="5" />
+<app-barcode-results class="barcode-results" [scannerResult]="scannerResult" />

@@ -1,0 +1,42 @@
+<button
+  type="button"
+  class="btn overlay-btn scan-btn"
+  [class.scanning]="isScanning()"
+  (click)="startScanner()"
+>
+  {{ isScanning() ? 'Scanning...' : 'Start scanning' }}
+</button>
+
+<select
+  [hidden]="!isScanning()"
+  [formControl]="deviceSelectControl"
+  class="device-select"
+>
+  <option *ngFor="let device of videoDevices(); let i = index; trackBy: trackByDeviceId" [ngValue]="device">
+    {{ device.label || ('Camera ' + (i + 1)) }}
+  </option>
+</select>
+
+<button
+  [hidden]="!isScanning()"
+  type="button"
+  class="btn overlay-btn instant-search-btn"
+  [class.locked]="instantSearch()"
+  (click)="toggleInstantSearch()"
+>
+  {{ instantSearch() ? '🔒' : '🔓' }} Instant search
+</button>
+
+<video
+  #videoElement
+  class="video-stream"
+  [srcObject]="activeStream()"
+  (loadedmetadata)="onVideoLoadedMetadata()"
+  (pause)="resetScanner()"
+></video>
+<canvas
+  #canvasElement
+  class="barcode-overlay"
+  [width]="canvasElementWidth()"
+  [height]="canvasElementHeight()"
+></canvas>

@@ -1,0 +1,25 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "eslint.options": {
+    "extensions": [
+      ".ts",
+      ".html"
+    ]
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "html"
+  ],
+  "stylelint.customSyntax": "postcss-scss",
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    "scss"
+  ],
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+}

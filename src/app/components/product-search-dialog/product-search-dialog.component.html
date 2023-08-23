@@ -1,0 +1,16 @@
+<dialog #dialog>
+  <ng-container [ngSwitch]="isLoading()">
+    <app-spinner *ngSwitchCase="true" />
+    <ng-container *ngSwitchCase="false">
+      <h3>{{ hasResult() ? '✔️ Product found' : '❌ Product not found' }}</h3>
+      <p *ngIf="hasResult()">{{ searchResult() }}</p>
+      <button
+        type="button"
+        class="btn"
+        [class.has-result]="hasResult()"
+        [class.no-result]="!hasResult()"
+        (click)="closeProductInfo()"
+      >OK</button>
+    </ng-container>
+  </ng-container>
+</dialog>
