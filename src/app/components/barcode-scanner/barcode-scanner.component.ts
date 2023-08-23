@@ -22,8 +22,8 @@ import { MediaDeviceService } from '../../core/services/media-device.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarcodeScannerComponent implements OnDestroy {
-  @ViewChild('videoElement') protected videoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvasElement') protected canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('videoElement') protected readonly videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement') protected readonly canvasElement!: ElementRef<HTMLCanvasElement>;
 
   @Input()
   public set frameRate(fps: number) {
@@ -57,8 +57,8 @@ export class BarcodeScannerComponent implements OnDestroy {
   private _wakeLockSentinel: WakeLockSentinel | null = null;
 
   constructor(
-    private barcodeDetectService: BarcodeDetectService,
-    private mediaDeviceService: MediaDeviceService,
+    private readonly barcodeDetectService: BarcodeDetectService,
+    private readonly mediaDeviceService: MediaDeviceService,
   ) {
     this.listenForDeviceChanges();
   }

@@ -36,7 +36,7 @@ export class ProductSearchDialogComponent implements AfterViewInit {
   private _barcode: BarcodeResultItem<true> | null = null;
   private _isViewInitialized = false;
 
-  constructor(private barcodeSarch: BarcodeSearchService) {}
+  constructor(private readonly barcodeSarch: BarcodeSearchService) {}
 
   public ngAfterViewInit(): void {
     this._isViewInitialized = true;

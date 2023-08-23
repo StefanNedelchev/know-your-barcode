@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class BarcodeSearchService {
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   public searchProductName(barcode: string): Observable<string | null> {
     return this.http.get<{ product: string | null }>(`${environment.functionsBaseUrl}/search-barcode`, {
