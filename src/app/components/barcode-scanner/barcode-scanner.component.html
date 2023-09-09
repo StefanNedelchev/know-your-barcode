@@ -8,9 +8,9 @@
 </button>
 
 <select
+  class="device-select"
   [hidden]="!isScanning()"
   [formControl]="deviceSelectControl"
-  class="device-select"
 >
   <option *ngFor="let device of videoDevices(); let i = index; trackBy: trackByDeviceId" [ngValue]="device">
     {{ device.label || ('Camera ' + (i + 1)) }}
@@ -18,9 +18,9 @@
 </select>
 
 <button
-  [hidden]="!isScanning()"
   type="button"
   class="btn overlay-btn instant-search-btn"
+  [hidden]="!isScanning()"
   [class.locked]="instantSearch()"
   (click)="toggleInstantSearch()"
 >
