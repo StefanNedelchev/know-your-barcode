@@ -26,9 +26,13 @@ export class AppComponent implements OnInit {
         // eslint-disable-next-line no-alert
         if (window.confirm('A new version of Know Your Barcode has been insetalled and ready to use! '
           + 'Do you want to refresh the app and let the new changes take effect?')) {
-          window.location.reload();
+          this.reloadPage();
         }
       });
     }
+  }
+
+  private reloadPage(): void {
+    window.location.reload();
   }
 }

@@ -1,16 +1,84 @@
 import { TestBed } from '@angular/core/testing';
+import { SwUpdate, VersionEvent } from '@angular/service-worker';
 import { MockComponent } from 'ng-mocks';
+import { BehaviorSubject } from 'rxjs';
 import { AppComponent } from './app.component';
 import { BarcodeResultsComponent } from './components/barcode-results/barcode-results.component';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [AppComponent, MockComponent(BarcodeResultsComponent)],
-  }));
+  let swUpdateSpy: jasmine.SpyObj<SwUpdate>;
+  const versionUpdates$ = new BehaviorSubject<VersionEvent>({ type: 'NO_NEW_VERSION_DETECTED', version: { hash: '' } });
+
+  beforeEach(() => {
+    versionUpdates$.next({ type: 'NO_NEW_VERSION_DETECTED', version: { hash: '' } });
+
+    swUpdateSpy = {
+      ...jasmine.createSpyObj<SwUpdate>('SwUpdate', ['isEnabled', 'versionUpdates']),
+      versionUpdates: versionUpdates$.asObservable(),
+      isEnabled: false,
+    } as jasmine.SpyObj<SwUpdate>;
+
+    TestBed.configureTestingModule({
+      imports: [
+        AppComponent,
+        MockComponent(BarcodeResultsComponent),
+      ],
+      providers: [
+        { provide: SwUpdate, useValue: swUpdateSpy },
+      ],
+    });
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('should detect service worker update and NOT reload the page', () => {
+    // Arrange
+    Object.defineProperty(swUpdateSpy, 'isEnabled', {
+      writable: true,
+      value: true,
+    });
+    const confirmSpy = spyOn(window, 'confirm').and.returnValue(false);
+    versionUpdates$.next({ type: 'VERSION_DETECTED' } as VersionEvent);
+    const fixture = TestBed.createComponent(AppComponent);
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(confirmSpy).not.toHaveBeenCalled();
+
+    // Act
+    versionUpdates$.next({ type: 'VERSION_READY' } as VersionEvent);
+    fixture.detectChanges();
+
+    // Assert
+    expect(confirmSpy).toHaveBeenCalled();
+  });
+
+  it('should detect service worker update and NOT reload the page', () => {
+    // Arrange
+    let isReloaded = false;
+    Object.defineProperty(swUpdateSpy, 'isEnabled', {
+      writable: true,
+      value: true,
+    });
+    const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+    const fixture = TestBed.createComponent(AppComponent);
+    Object.defineProperty(fixture.componentInstance, 'reloadPage', {
+      writable: true,
+      value: () => { isReloaded = true },
+    });
+
+    // Act
+    versionUpdates$.next({ type: 'VERSION_READY' } as VersionEvent);
+    fixture.detectChanges();
+
+    // Assert
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(isReloaded).toBeTrue();
   });
 });
