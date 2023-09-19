@@ -53,6 +53,7 @@
         "@angular-eslint/no-pipe-impure": "error",
         "@angular-eslint/prefer-on-push-component-change-detection": "warn",
         "@angular-eslint/prefer-output-readonly": "error",
+        "@angular-eslint/sort-lifecycle-methods": "error",
         "@typescript-eslint/explicit-module-boundary-types": "error",
         "@typescript-eslint/lines-between-class-members": [
           "error",
