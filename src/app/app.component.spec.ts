@@ -7,10 +7,13 @@ import { BarcodeResultsComponent } from './components/barcode-results/barcode-re
 
 describe('AppComponent', () => {
   let swUpdateSpy: jasmine.SpyObj<SwUpdate>;
+  let windowConfirmSpy: jasmine.Spy<(message?: string) => boolean>;
   const versionUpdates$ = new BehaviorSubject<VersionEvent>({ type: 'NO_NEW_VERSION_DETECTED', version: { hash: '' } });
 
   beforeEach(() => {
     versionUpdates$.next({ type: 'NO_NEW_VERSION_DETECTED', version: { hash: '' } });
+
+    windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
 
     swUpdateSpy = {
       ...jasmine.createSpyObj<SwUpdate>('SwUpdate', ['isEnabled', 'versionUpdates']),
@@ -30,6 +33,7 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
+    windowConfirmSpy.and.returnValue(false);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
@@ -41,7 +45,7 @@ describe('AppComponent', () => {
       writable: true,
       value: true,
     });
-    const confirmSpy = spyOn(window, 'confirm').and.returnValue(false);
+    windowConfirmSpy.and.returnValue(false);
     versionUpdates$.next({ type: 'VERSION_DETECTED' } as VersionEvent);
     const fixture = TestBed.createComponent(AppComponent);
 
@@ -49,14 +53,14 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(windowConfirmSpy).not.toHaveBeenCalled();
 
     // Act
     versionUpdates$.next({ type: 'VERSION_READY' } as VersionEvent);
     fixture.detectChanges();
 
     // Assert
-    expect(confirmSpy).toHaveBeenCalled();
+    expect(windowConfirmSpy).toHaveBeenCalled();
   });
 
   it('should detect service worker update and NOT reload the page', () => {
@@ -66,7 +70,7 @@ describe('AppComponent', () => {
       writable: true,
       value: true,
     });
-    const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+    windowConfirmSpy.and.returnValue(true);
     const fixture = TestBed.createComponent(AppComponent);
     Object.defineProperty(fixture.componentInstance, 'reloadPage', {
       writable: true,
@@ -78,7 +82,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     // Assert
-    expect(confirmSpy).toHaveBeenCalled();
+    expect(windowConfirmSpy).toHaveBeenCalled();
     expect(isReloaded).toBeTrue();
   });
 });
