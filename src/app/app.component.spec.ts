@@ -36,6 +36,10 @@ describe('AppComponent', () => {
     windowConfirmSpy.and.returnValue(false);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
+    Object.defineProperty(fixture.componentInstance, 'reloadPage', {
+      writable: true,
+      value: () => { },
+    });
     expect(app).toBeTruthy();
   });
 
@@ -48,6 +52,10 @@ describe('AppComponent', () => {
     windowConfirmSpy.and.returnValue(false);
     versionUpdates$.next({ type: 'VERSION_DETECTED' } as VersionEvent);
     const fixture = TestBed.createComponent(AppComponent);
+    Object.defineProperty(fixture.componentInstance, 'reloadPage', {
+      writable: true,
+      value: () => { },
+    });
 
     // Act
     fixture.detectChanges();
