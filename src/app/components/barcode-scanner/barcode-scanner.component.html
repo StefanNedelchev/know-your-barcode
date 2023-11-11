@@ -12,9 +12,11 @@
   [hidden]="!isScanning()"
   [formControl]="deviceSelectControl"
 >
-  <option *ngFor="let device of videoDevices(); let i = index; trackBy: trackByDeviceId" [ngValue]="device">
+@for(device of videoDevices(); track device.deviceId; let i = $index) {
+  <option [ngValue]="device">
     {{ device.label || ('Camera ' + (i + 1)) }}
   </option>
+}
 </select>
 
 <button

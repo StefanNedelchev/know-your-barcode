@@ -1,9 +1,6 @@
 import {
   ChangeDetectionStrategy, Component, Input, signal,
 } from '@angular/core';
-import {
-  NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault,
-} from '@angular/common';
 import { IDetectedBarcode } from 'barcode-detector-api-polyfill';
 import { BarcodeResultItem, BarcodeScannerResult } from '../../core/models';
 import { ProductSearchDialogComponent } from '../product-search-dialog/product-search-dialog.component';
@@ -11,7 +8,7 @@ import { ProductSearchDialogComponent } from '../product-search-dialog/product-s
 @Component({
   selector: 'app-barcode-results',
   standalone: true,
-  imports: [NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, ProductSearchDialogComponent],
+  imports: [ProductSearchDialogComponent],
   templateUrl: './barcode-results.component.html',
   styleUrls: ['./barcode-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,10 +30,6 @@ export class BarcodeResultsComponent {
   public barcodeResults: BarcodeResultItem[] = [];
 
   private _matrixFormats = ['aztec', 'data_matrix', 'pdf417', 'qr_code', 'unknown'];
-
-  public trackByValue(index: number, barcodeItem: BarcodeResultItem): string {
-    return barcodeItem.rawValue;
-  }
 
   public selectBarcode(barcode: BarcodeResultItem): void {
     if (barcode.searchable) {

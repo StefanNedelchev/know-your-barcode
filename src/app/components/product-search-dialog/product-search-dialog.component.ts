@@ -1,9 +1,6 @@
 import {
   Component, ChangeDetectionStrategy, signal, Input, ViewChild, ElementRef, Output, EventEmitter, AfterViewInit, computed,
 } from '@angular/core';
-import {
-  NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault,
-} from '@angular/common';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { BarcodeResultItem } from '../../core/models';
 import { BarcodeSearchService } from '../../core/services/barcode-search.service';
@@ -11,7 +8,7 @@ import { BarcodeSearchService } from '../../core/services/barcode-search.service
 @Component({
   selector: 'app-product-search-dialog',
   standalone: true,
-  imports: [NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, SpinnerComponent],
+  imports: [SpinnerComponent],
   templateUrl: './product-search-dialog.component.html',
   styleUrls: ['./product-search-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

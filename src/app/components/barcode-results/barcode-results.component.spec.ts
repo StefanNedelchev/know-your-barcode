@@ -125,17 +125,6 @@ describe('BarcodeResultsComponent', () => {
     });
   });
 
-  describe('#trackByValue', () => {
-    it('should return barcode raw value', () => {
-      // Act
-      const barcode: BarcodeResultItem = { rawValue: '123456', searchable: true };
-      const result = component.trackByValue(Math.round(Math.random() * 10), barcode);
-
-      // Assert
-      expect(result).toEqual(barcode.rawValue);
-    });
-  });
-
   describe('#selectBarcode', () => {
     it('should NOT select barcode if not searchable', () => {
       // Act

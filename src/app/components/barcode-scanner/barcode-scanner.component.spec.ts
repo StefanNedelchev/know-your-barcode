@@ -305,17 +305,6 @@ describe('BarcodeScannerComponent', () => {
     });
   });
 
-  describe('#trackByDeviceId', () => {
-    it('should return device id', () => {
-      // Act
-      const device: MediaDeviceInfo = mockedVideoDevices[0];
-      const result = component.trackByDeviceId(Math.round(Math.random() * 10), device);
-
-      // Assert
-      expect(result).toEqual(device.deviceId);
-    });
-  });
-
   describe('#onVisibilityChange', () => {
     it('should release and regain wake lock between visibility changes', async () => {
       // Arrange

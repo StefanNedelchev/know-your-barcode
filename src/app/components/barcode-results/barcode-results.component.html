@@ -1,19 +1,23 @@
 <ul>
-  <li *ngFor="let result of barcodeResults; trackBy: trackByValue">
-    <ng-container [ngSwitch]="result.url">
+@for (result of barcodeResults; track result.rawValue) {
+  <li>
+  @switch (result.url) {
+    @case (undefined) {
       <button
-        *ngSwitchCase="undefined"
         type="button"
         class="btn"
         (click)="selectBarcode(result)"
       >{{ result.rawValue }} 🔍</button>
+    }
+    @default {
       <a
-        *ngSwitchDefault
         target="_blank"
         [href]="result.url"
       >{{ result.rawValue }} 🔍</a>
-    </ng-container>
+    }
+  }
   </li>
+}
 </ul>
 
 <app-product-search-dialog [barcode]="selectedBarcode()" (dialogClose)="selectedBarcode.set(null)" />
