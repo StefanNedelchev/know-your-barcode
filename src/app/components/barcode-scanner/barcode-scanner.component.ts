@@ -3,7 +3,6 @@ import {
   Output, ViewChild, signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
 import { ICornerPoint } from 'barcode-detector-api-polyfill';
 import {
   Subscription, from, fromEvent, of,
@@ -16,7 +15,7 @@ import { MediaDeviceService } from '../../core/services/media-device.service';
 @Component({
   selector: 'app-barcode-scanner',
   standalone: true,
-  imports: [NgIf, NgForOf, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -127,10 +126,6 @@ export class BarcodeScannerComponent implements OnDestroy {
 
   public toggleInstantSearch(): void {
     this.instantSearch.set(!this.instantSearch());
-  }
-
-  public trackByDeviceId(index: number, device: MediaDeviceInfo): string {
-    return device.deviceId;
   }
 
   private listenForDeviceChanges(): void {
