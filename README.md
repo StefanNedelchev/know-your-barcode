@@ -12,7 +12,7 @@ This is a web-based project built with [Angular](https://angular.dev/) using som
 
 ### PWA 📱
 
-The project is also a Progressive Web App (PWA) thanks to the Angular thanks to its [service worker](https://angular.dev/ecosystem/service-workers). It covers all requirements for the web manifest configuration and meta tags for a "full green check" on Google's Lighthouse PWA analysis.
+The project is also a Progressive Web App (PWA) thanks to the Angular and its [service worker](https://angular.dev/ecosystem/service-workers). It covers all requirements for the web manifest configuration and meta tags for a "full green check" on Google's Lighthouse PWA analysis.
 
 ### Camera usage 📷
 
