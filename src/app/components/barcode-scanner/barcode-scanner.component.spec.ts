@@ -236,7 +236,10 @@ describe('BarcodeScannerComponent', () => {
 
       // Assert
       expect(emittedBarcodes.barcodes).toEqual(testBarcodes2);
-      expect(moveToSpy).toHaveBeenCalledOnceWith(testBarcodes2[0].cornerPoints[0].x, testBarcodes2[0].cornerPoints[0].y);
+      expect(moveToSpy).toHaveBeenCalledOnceWith(
+        testBarcodes2[0].cornerPoints[0].x,
+        testBarcodes2[0].cornerPoints[0].y,
+      );
       expect(lineToSpy.calls.allArgs()).toEqual(testBarcodes2[0].cornerPoints.slice(1).map((p) => ([p.x, p.y])));
       expect(closePathSpy).not.toHaveBeenCalled();
     }));

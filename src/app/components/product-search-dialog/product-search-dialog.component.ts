@@ -1,5 +1,6 @@
 import {
-  Component, ChangeDetectionStrategy, signal, Input, ViewChild, ElementRef, Output, EventEmitter, AfterViewInit, computed,
+  Component, ChangeDetectionStrategy, signal, Input, ViewChild, ElementRef,
+  Output, EventEmitter, AfterViewInit, computed,
 } from '@angular/core';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { BarcodeResultItem } from '../../core/models';
