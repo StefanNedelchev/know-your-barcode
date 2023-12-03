@@ -16,10 +16,12 @@ import { ProductSearchDialogComponent } from '../product-search-dialog/product-s
 export class BarcodeResultsComponent {
   @Input()
   public set scannerResult(result: BarcodeScannerResult) {
-    this.barcodeResults = result.barcodes.map((barcode) => this.parseBarcode(barcode));
+    this.barcodeResults.set(
+      result.barcodes.map((barcode) => this.parseBarcode(barcode)),
+    );
 
     if (result.instantSearch) {
-      const searchableBarcode = this.barcodeResults.find((b) => b.searchable);
+      const searchableBarcode = this.barcodeResults().find((b) => b.searchable);
       if (searchableBarcode) {
         this.selectBarcode(searchableBarcode);
       }
@@ -27,7 +29,7 @@ export class BarcodeResultsComponent {
   }
 
   public selectedBarcode = signal<BarcodeResultItem<true> | null>(null);
-  public barcodeResults: BarcodeResultItem[] = [];
+  public barcodeResults = signal<BarcodeResultItem[]>([]);
 
   private _matrixFormats = ['aztec', 'data_matrix', 'pdf417', 'qr_code', 'unknown'];
 

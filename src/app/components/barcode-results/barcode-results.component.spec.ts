@@ -58,7 +58,7 @@ describe('BarcodeResultsComponent', () => {
       fixture.detectChanges();
 
       // Assert
-      expect(component.barcodeResults).toEqual(expectedOutput);
+      expect(component.barcodeResults()).toEqual(expectedOutput);
     });
 
     it('should NOT do instant search if there are no barcodes', () => {

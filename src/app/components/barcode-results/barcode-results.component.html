@@ -1,5 +1,5 @@
 <ul>
-@for (result of barcodeResults; track result.rawValue) {
+@for (result of barcodeResults(); track result.rawValue) {
   <li>
   @switch (result.url) {
     @case (undefined) {
