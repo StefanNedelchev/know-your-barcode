@@ -24,6 +24,12 @@ export class BarcodeResultsComponent {
       const searchableBarcode = this.barcodeResults().find((b) => b.searchable);
       if (searchableBarcode) {
         this.selectBarcode(searchableBarcode);
+        return;
+      }
+
+      const linkBarcode = this.barcodeResults().find((b) => b.url && !b.url.startsWith('https://www.google'));
+      if (linkBarcode) {
+        window.open(linkBarcode.url, '_blank');
       }
     }
   }
