@@ -29,7 +29,13 @@ export class BarcodeResultsComponent {
 
       const linkBarcode = this.barcodeResults().find((b) => b.url && !b.url.startsWith('https://www.google'));
       if (linkBarcode) {
-        window.open(linkBarcode.url, '_blank');
+        if (this._externalWindow?.closed) {
+          this._externalWindow = null;
+        }
+
+        if (!this._externalWindow) {
+          this._externalWindow = window.open(linkBarcode.url, '_blank');
+        }
       }
     }
   }
@@ -38,6 +44,7 @@ export class BarcodeResultsComponent {
   public barcodeResults = signal<BarcodeResultItem[]>([]);
 
   private _matrixFormats = ['aztec', 'data_matrix', 'pdf417', 'qr_code', 'unknown'];
+  private _externalWindow: Window | null = null;
 
   public selectBarcode(barcode: BarcodeResultItem): void {
     if (barcode.searchable) {
