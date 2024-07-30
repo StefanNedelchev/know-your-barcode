@@ -25,7 +25,7 @@
     "@angular/service-worker": "^18.1.2",
     "@netlify/functions": "^2.8.1",
     "axios": "^1.7.2",
-    "barcode-detector-api-polyfill": "^1.0.14",
+    "barcode-detector-api-polyfill": "^1.0.15",
     "bootstrap": "^5.3.3",
     "cheerio": "^1.0.0-rc.12",
     "rxjs": "~7.8.1",
@@ -56,7 +56,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "netlify-cli": "^17.33.4",
     "ng-mocks": "^14.13.0",
-    "stylelint": "^16.8.0",
+    "stylelint": "^16.8.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "typescript": "~5.4.5"
   }
