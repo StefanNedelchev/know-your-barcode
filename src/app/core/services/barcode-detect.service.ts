@@ -34,7 +34,7 @@ export class BarcodeDetectService {
       const polyfillModule = await import('barcode-detector-api-polyfill');
       this._DetectorApi = polyfillModule.BarcodeDetector;
       this._detector = new polyfillModule.BarcodeDetector();
-    } else if (!this._detector) {
+    } else {
       this._DetectorApi = BarcodeDetector;
       this._detector = new BarcodeDetector();
     }

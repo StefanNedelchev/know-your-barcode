@@ -7,7 +7,6 @@ import { ProductSearchDialogComponent } from '../product-search-dialog/product-s
 
 @Component({
   selector: 'app-barcode-results',
-  standalone: true,
   imports: [ProductSearchDialogComponent],
   templateUrl: './barcode-results.component.html',
   styleUrls: ['./barcode-results.component.scss'],

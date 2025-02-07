@@ -11,9 +11,10 @@ export class BarcodeSearchService {
   constructor(private readonly http: HttpClient) { }
 
   public searchProductName(barcode: string): Observable<string | null> {
-    return this.http.get<{ product: string | null }>(`${environment.functionsBaseUrl}/search-barcode`, {
-      params: { barcode },
-    }).pipe(
+    return this.http.get<{ product: string | null }>(
+      `${environment.functionsBaseUrl}/search-barcode`,
+      { params: { barcode } },
+    ).pipe(
       map((res) => res.product),
     );
   }

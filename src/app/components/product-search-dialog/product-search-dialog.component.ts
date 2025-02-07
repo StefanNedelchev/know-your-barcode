@@ -8,7 +8,6 @@ import { BarcodeSearchService } from '../../core/services/barcode-search.service
 
 @Component({
   selector: 'app-product-search-dialog',
-  standalone: true,
   imports: [SpinnerComponent],
   templateUrl: './product-search-dialog.component.html',
   styleUrls: ['./product-search-dialog.component.scss'],

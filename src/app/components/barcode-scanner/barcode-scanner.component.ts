@@ -14,7 +14,6 @@ import { MediaDeviceService } from '../../core/services/media-device.service';
 
 @Component({
   selector: 'app-barcode-scanner',
-  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss'],
@@ -108,14 +107,13 @@ export class BarcodeScannerComponent implements OnDestroy {
 
     const stream = await this.mediaDeviceService.getVideoStream();
     const selectedDeviceId = this.mediaDeviceService.getDeviceFromStream(stream);
-    const selectedDevice = this.videoDevices().find(({ deviceId }) => deviceId === selectedDeviceId) as MediaDeviceInfo;
+    const selectedDevice = this.videoDevices()
+      .find(({ deviceId }) => deviceId === selectedDeviceId) as MediaDeviceInfo;
 
     this.deviceSelectControl.setValue(selectedDevice, { emitEvent: false });
     this.activeStream.set(stream);
 
-    if (stream) {
-      await this.mediaDeviceService.applyAppropriateConstraints(stream);
-    }
+    await this.mediaDeviceService.applyAppropriateConstraints(stream);
   }
 
   public resetScanner(): void {
@@ -166,17 +164,17 @@ export class BarcodeScannerComponent implements OnDestroy {
   }
 
   private drawBarcodeOutline(cornerPoints: ICornerPoint[]): void {
-    if (!this._ctx) {
+    if (!this._ctx || !cornerPoints.length) {
       return;
     }
 
     const cornerPointsCount = cornerPoints.length;
 
     this._ctx.beginPath();
-    this._ctx.moveTo(cornerPoints[0].x, cornerPoints[0].y);
+    this._ctx.moveTo((cornerPoints[0]).x, (cornerPoints[0]).y);
 
     for (let i = 1; i < cornerPointsCount; i++) {
-      this._ctx.lineTo(cornerPoints[i].x, cornerPoints[i].y);
+      this._ctx.lineTo((cornerPoints[i]).x, (cornerPoints[i]).y);
     }
 
     if (cornerPointsCount === 4) {

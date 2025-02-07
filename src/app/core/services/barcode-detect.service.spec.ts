@@ -62,7 +62,9 @@ describe('BarcodeDetectService', () => {
 
     it('should initialize supported formats from zxing polyfill', async () => {
       // Arrange
-      delete (window as (Window & typeof globalThis & { BarcodeDetector?: unknown })).BarcodeDetector;
+      delete (
+        window as (Window & typeof globalThis & { BarcodeDetector?: unknown })
+      ).BarcodeDetector;
       const getFormatsSpy = spyOn(BarcodeDetectorPolyfill, 'getSupportedFormats').and.callThrough();
       const zxingSupportedFormats = await BarcodeDetectorPolyfill.getSupportedFormats();
       service = TestBed.inject(BarcodeDetectService);

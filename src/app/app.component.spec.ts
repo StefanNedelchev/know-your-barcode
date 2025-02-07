@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { TestBed } from '@angular/core/testing';
 import { SwUpdate, VersionEvent } from '@angular/service-worker';
 import { MockComponent } from 'ng-mocks';
@@ -16,6 +17,7 @@ describe('AppComponent', () => {
     windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(false);
 
     swUpdateSpy = {
+      // eslint-disable-next-line @typescript-eslint/no-misused-spread
       ...jasmine.createSpyObj<SwUpdate>('SwUpdate', ['isEnabled', 'versionUpdates']),
       versionUpdates: versionUpdates$.asObservable(),
       isEnabled: false,

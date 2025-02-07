@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick,
 } from '@angular/core/testing';
@@ -184,7 +185,9 @@ describe('BarcodeScannerComponent', () => {
 
     const testBarcodes: IDetectedBarcode[] = [{
       boundingBox: new DOMRectReadOnly(),
-      cornerPoints: [{ x: 300, y: 100 }, { x: 700, y: 110 }, { x: 700, y: 415 }, { x: 300, y: 400 }],
+      cornerPoints: [
+        { x: 300, y: 100 }, { x: 700, y: 110 }, { x: 700, y: 415 }, { x: 300, y: 400 },
+      ],
       format: 'code_39',
       rawValue: '123456',
     }];
@@ -208,8 +211,12 @@ describe('BarcodeScannerComponent', () => {
 
       // Assert
       expect(emittedBarcodes.barcodes).toEqual(testBarcodes);
-      expect(moveToSpy).toHaveBeenCalledOnceWith(testBarcodes[0].cornerPoints[0].x, testBarcodes[0].cornerPoints[0].y);
-      expect(lineToSpy.calls.allArgs()).toEqual(testBarcodes[0].cornerPoints.slice(1).map((p) => ([p.x, p.y])));
+      expect(moveToSpy).toHaveBeenCalledOnceWith(
+        testBarcodes[0].cornerPoints[0].x, testBarcodes[0].cornerPoints[0].y,
+      );
+      expect(lineToSpy.calls.allArgs()).toEqual(
+        testBarcodes[0].cornerPoints.slice(1).map((p) => ([p.x, p.y])),
+      );
       expect(closePathSpy).toHaveBeenCalledTimes(1);
     }));
 
@@ -240,7 +247,9 @@ describe('BarcodeScannerComponent', () => {
         testBarcodes2[0].cornerPoints[0].x,
         testBarcodes2[0].cornerPoints[0].y,
       );
-      expect(lineToSpy.calls.allArgs()).toEqual(testBarcodes2[0].cornerPoints.slice(1).map((p) => ([p.x, p.y])));
+      expect(lineToSpy.calls.allArgs()).toEqual(
+        testBarcodes2[0].cornerPoints.slice(1).map((p) => ([p.x, p.y])),
+      );
       expect(closePathSpy).not.toHaveBeenCalled();
     }));
 

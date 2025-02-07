@@ -3,17 +3,6 @@
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-  "eslint.options": {
-    "extensions": [
-      ".ts",
-      ".html"
-    ]
-  },
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "html"
-  ],
   "stylelint.customSyntax": "postcss-scss",
   "stylelint.validate": [
     "css",

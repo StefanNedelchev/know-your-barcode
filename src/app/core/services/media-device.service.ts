@@ -32,7 +32,7 @@ export class MediaDeviceService {
   }
 
   public async applyAppropriateConstraints(stream: MediaStream): Promise<void> {
-    const videoTrack = stream.getVideoTracks()[0];
+    const videoTrack = stream.getVideoTracks()[0] as MediaStreamTrack | undefined;
 
     if (!videoTrack || !('getCapabilities' in videoTrack)) {
       return;
@@ -58,7 +58,11 @@ export class MediaDeviceService {
       newConstraints.sharpness = { ideal: capabilities.sharpness.max - 1 };
     }
 
-    if (capabilities.frameRate?.max && settings.frameRate && settings.frameRate < capabilities.frameRate.max) {
+    if (
+      capabilities.frameRate?.max
+      && settings.frameRate
+      && settings.frameRate < capabilities.frameRate.max
+    ) {
       newConstraints.frameRate = { ideal: capabilities.frameRate.max };
     }
 

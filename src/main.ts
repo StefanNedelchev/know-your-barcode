@@ -13,4 +13,5 @@ setPreferredScheme();
 prefersSchemeMedia.addEventListener('change', setPreferredScheme);
 
 bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+  // eslint-disable-next-line no-console
+  .catch((err: unknown) => console.error(err));
