@@ -95,6 +95,16 @@ export default eslintTS.config(
       ...eslintNG.configs.templateRecommended,
       ...eslintNG.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      "@angular-eslint/template/alt-text": "error",
+      "@angular-eslint/template/attributes-order": "error",
+      "@angular-eslint/template/conditional-complexity": "error",
+      "@angular-eslint/template/label-has-associated-control": "error",
+      "@angular-eslint/template/no-call-expression": "off",
+      "@angular-eslint/template/no-negated-async": "error",
+      "@angular-eslint/template/prefer-control-flow": "error",
+      "@angular-eslint/template/prefer-self-closing-tags": "error",
+      "@angular-eslint/template/valid-aria": "error"
+    },
   },
 );
