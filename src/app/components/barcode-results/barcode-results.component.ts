@@ -32,9 +32,7 @@ export class BarcodeResultsComponent {
           this._externalWindow = null;
         }
 
-        if (!this._externalWindow) {
-          this._externalWindow = window.open(linkBarcode.url, '_blank');
-        }
+        this._externalWindow ??= window.open(linkBarcode.url, '_blank');
       }
     }
   }
