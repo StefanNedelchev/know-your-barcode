@@ -51,6 +51,7 @@ export default eslintTS.config(
       "@angular-eslint/no-conflicting-lifecycle": "error",
       "@angular-eslint/no-lifecycle-call": "error",
       "@angular-eslint/no-pipe-impure": "error",
+      "@angular-eslint/prefer-inject": "off",
       "@angular-eslint/prefer-on-push-component-change-detection": "warn",
       "@angular-eslint/prefer-output-readonly": "error",
       "@angular-eslint/sort-lifecycle-methods": "error",
