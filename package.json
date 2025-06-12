@@ -14,15 +14,15 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^20.0.2",
-    "@angular/common": "^20.0.2",
-    "@angular/compiler": "^20.0.2",
-    "@angular/core": "^20.0.2",
-    "@angular/forms": "^20.0.2",
-    "@angular/platform-browser": "^20.0.2",
-    "@angular/platform-browser-dynamic": "^20.0.2",
-    "@angular/router": "^20.0.2",
-    "@angular/service-worker": "^20.0.2",
+    "@angular/animations": "^20.0.3",
+    "@angular/common": "^20.0.3",
+    "@angular/compiler": "^20.0.3",
+    "@angular/core": "^20.0.3",
+    "@angular/forms": "^20.0.3",
+    "@angular/platform-browser": "^20.0.3",
+    "@angular/platform-browser-dynamic": "^20.0.3",
+    "@angular/router": "^20.0.3",
+    "@angular/service-worker": "^20.0.3",
     "@netlify/functions": "^3.1.10",
     "axios": "^1.9.0",
     "barcode-detector-api-polyfill": "^1.0.16",
@@ -33,9 +33,9 @@
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.0.1",
-    "@angular/cli": "^20.0.1",
-    "@angular/compiler-cli": "^20.0.2",
+    "@angular-devkit/build-angular": "^20.0.2",
+    "@angular/cli": "^20.0.2",
+    "@angular/compiler-cli": "^20.0.3",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@types/jasmine": "~5.1.6",
     "angular-eslint": "~20.0.0",
@@ -55,6 +55,6 @@
     "stylelint": "^16.20.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "typescript": "~5.8.3",
-    "typescript-eslint": "^8.33.1"
+    "typescript-eslint": "^8.34.0"
   }
 }
