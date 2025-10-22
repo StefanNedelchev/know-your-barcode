@@ -18,7 +18,7 @@ export class MediaDeviceService {
       height: { min: this.DEFAULT_SIZE },
     };
 
-    if (device && device.kind === 'videoinput') {
+    if (device?.kind === 'videoinput') {
       constraints.deviceId = { exact: device.deviceId };
     } else {
       constraints.facingMode = 'environment';
