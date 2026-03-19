@@ -1,3 +1,4 @@
+import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent } from 'ng-mocks';
 import { BarcodeResultsComponent } from './barcode-results.component';
@@ -7,6 +8,7 @@ import { BarcodeResultItem, BarcodeScannerResult } from '../../core/models';
 describe('BarcodeResultsComponent', () => {
   let component: BarcodeResultsComponent;
   let fixture: ComponentFixture<BarcodeResultsComponent>;
+  let componentRef: ComponentRef<BarcodeResultsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -14,6 +16,11 @@ describe('BarcodeResultsComponent', () => {
     });
     fixture = TestBed.createComponent(BarcodeResultsComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
+    componentRef.setInput('scannerResult', {
+      instantSearch: false,
+      barcodes: [],
+    });
     fixture.detectChanges();
   });
 
@@ -54,7 +61,7 @@ describe('BarcodeResultsComponent', () => {
       ];
 
       // Act
-      component.scannerResult = input;
+      componentRef.setInput('scannerResult', input);
       fixture.detectChanges();
 
       // Assert
@@ -69,7 +76,7 @@ describe('BarcodeResultsComponent', () => {
       };
 
       // Act
-      component.scannerResult = input;
+      componentRef.setInput('scannerResult', input);
       fixture.detectChanges();
 
       // Assert
@@ -89,7 +96,7 @@ describe('BarcodeResultsComponent', () => {
       };
 
       // Act
-      component.scannerResult = input;
+      componentRef.setInput('scannerResult', input);
       fixture.detectChanges();
 
       // Assert
@@ -117,7 +124,7 @@ describe('BarcodeResultsComponent', () => {
       };
 
       // Act
-      component.scannerResult = input;
+      componentRef.setInput('scannerResult', input);
       fixture.detectChanges();
 
       // Assert

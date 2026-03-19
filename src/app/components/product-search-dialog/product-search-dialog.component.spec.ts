@@ -1,3 +1,4 @@
+import { ComponentRef } from '@angular/core';
 import {
   ComponentFixture, TestBed, fakeAsync, tick,
 } from '@angular/core/testing';
@@ -8,6 +9,7 @@ import { BarcodeSearchService } from '../../core/services/barcode-search.service
 describe('ProductSearchDialogComponent', () => {
   let component: ProductSearchDialogComponent;
   let fixture: ComponentFixture<ProductSearchDialogComponent>;
+  let componentRef: ComponentRef<ProductSearchDialogComponent>;
   let barcodeSearchServiceSpy: jasmine.SpyObj<BarcodeSearchService>;
 
   beforeEach(() => {
@@ -21,6 +23,7 @@ describe('ProductSearchDialogComponent', () => {
       ],
     });
     fixture = TestBed.createComponent(ProductSearchDialogComponent);
+    componentRef = fixture.componentRef;
     component = fixture.componentInstance;
   });
 
@@ -50,7 +53,7 @@ describe('ProductSearchDialogComponent', () => {
   describe('#barcode', () => {
     it('should NOT call search API before view is initialized', () => {
       // Act
-      component.barcode = { rawValue: '12345', searchable: true };
+      componentRef.setInput('barcode', { rawValue: '12345', searchable: true });
 
       // Assert
       expect(barcodeSearchServiceSpy.searchProductName).not.toHaveBeenCalled();
@@ -61,7 +64,7 @@ describe('ProductSearchDialogComponent', () => {
       fixture.detectChanges();
 
       // Act
-      component.barcode = null;
+      componentRef.setInput('barcode', null);
 
       // Assert
       expect(barcodeSearchServiceSpy.searchProductName).not.toHaveBeenCalled();
@@ -72,13 +75,14 @@ describe('ProductSearchDialogComponent', () => {
       fixture.detectChanges();
 
       // Act
-      component.barcode = { rawValue: '12345', searchable: true };
+      componentRef.setInput('barcode', { rawValue: '12345', searchable: true });
+      fixture.detectChanges();
 
       // Assert
       expect(barcodeSearchServiceSpy.searchProductName).toHaveBeenCalledOnceWith('12345');
     });
 
-    it('should correctly set local state before and after successful search', fakeAsync(() => {
+    it('should correctly set local state before and after successful search', () => {
       // Arrange
       const dialogEl = (fixture.nativeElement as HTMLElement).querySelector('dialog') as HTMLDialogElement;
       const productName = 'Test Product';
@@ -92,63 +96,61 @@ describe('ProductSearchDialogComponent', () => {
       expect(component.searchResult()).toBeNull();
 
       // Act
-      component.barcode = { rawValue: barcode, searchable: true };
-      tick();
+      componentRef.setInput('barcode', { rawValue: barcode, searchable: true });
+      fixture.detectChanges();
 
       // Assert
       expect(dialogEl.open).toBeTrue();
       expect(barcodeSearchServiceSpy.searchProductName).toHaveBeenCalledOnceWith(barcode);
       expect(component.isLoading()).toBeFalse();
       expect(component.searchResult()).toEqual(productName);
-    }));
+    });
 
-    it('should NOT execute a new search while result dialog is still open', fakeAsync(() => {
+    it('should NOT execute a new search while result dialog is still open', () => {
       // Arrange
       const dialogEl = (fixture.nativeElement as HTMLElement).querySelector('dialog') as HTMLDialogElement;
       const oldProductName = 'Old Product';
       const newProductName = 'New Product';
       barcodeSearchServiceSpy.searchProductName.and.returnValue(of(oldProductName));
+      componentRef.setInput('barcode', { rawValue: '12345', searchable: true });
       fixture.detectChanges();
-      component.barcode = { rawValue: '12345', searchable: true };
-      tick();
       barcodeSearchServiceSpy.searchProductName.calls.reset();
       barcodeSearchServiceSpy.searchProductName.and.returnValue(of(newProductName));
 
       // Act
-      component.barcode = { rawValue: '67890', searchable: true };
-      tick();
+      componentRef.setInput('barcode', { rawValue: '67890', searchable: true });
+      fixture.detectChanges();
 
       // Assert
       expect(dialogEl.open).toBeTrue();
       expect(barcodeSearchServiceSpy.searchProductName).not.toHaveBeenCalled();
       expect(component.isLoading()).toBeFalse();
       expect(component.searchResult()).toEqual(oldProductName);
-    }));
+    });
 
-    it('should execute a new search after result dialog is closed', fakeAsync(() => {
+    it('should execute a new search after result dialog is closed', () => {
       // Arrange
       const oldBarcode = '12345';
       const oldProductName = 'Old Product';
       const newBarcode = '67890';
       const newProductName = 'New Product';
       barcodeSearchServiceSpy.searchProductName.and.returnValue(of(oldProductName));
+      componentRef.setInput('barcode', { rawValue: oldBarcode, searchable: true });
       fixture.detectChanges();
-      component.barcode = { rawValue: oldBarcode, searchable: true };
-      tick();
       barcodeSearchServiceSpy.searchProductName.calls.reset();
       barcodeSearchServiceSpy.searchProductName.and.returnValue(of(newProductName));
       // Close dialog
       component.closeProductInfo();
 
       // Act
-      component.barcode = { rawValue: newBarcode, searchable: true };
-      tick();
+      componentRef.setInput('barcode', { rawValue: newBarcode, searchable: true });
+      fixture.detectChanges();
 
       // Assert
 
       expect(barcodeSearchServiceSpy.searchProductName).toHaveBeenCalledOnceWith(newBarcode);
       expect(component.searchResult()).toEqual(newProductName);
-    }));
+    });
   });
 
   describe('#closeProductInfo', () => {
@@ -159,7 +161,7 @@ describe('ProductSearchDialogComponent', () => {
       component.dialogClose.subscribe(() => { hasEmitted = true });
       barcodeSearchServiceSpy.searchProductName.and.returnValue(of('Test'));
       fixture.detectChanges();
-      component.barcode = { rawValue: '12345', searchable: true };
+      componentRef.setInput('barcode', { rawValue: '12345', searchable: true });
       tick();
 
       // Act
@@ -171,19 +173,19 @@ describe('ProductSearchDialogComponent', () => {
       expect(dialogEl.open).toBeFalse();
     }));
 
-    it('should be called on search error', fakeAsync(() => {
+    it('should be called on search error', () => {
       // Arrange
       const closeSpy = spyOn(component, 'closeProductInfo').and.callThrough();
       barcodeSearchServiceSpy.searchProductName.and.returnValue(throwError(() => new Error('Test')));
       fixture.detectChanges();
 
       // Act
-      component.barcode = { rawValue: '12345', searchable: true };
-      tick();
+      componentRef.setInput('barcode', { rawValue: '12345', searchable: true });
+      fixture.detectChanges();
 
       // Assert
       expect(closeSpy).toHaveBeenCalled();
       expect(barcodeSearchServiceSpy.searchProductName).toHaveBeenCalledOnceWith('12345');
-    }));
+    });
   });
 });

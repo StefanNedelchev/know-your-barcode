@@ -1,6 +1,6 @@
 import {
-  Component, ChangeDetectionStrategy, signal, Input, ViewChild, ElementRef,
-  Output, EventEmitter, AfterViewInit, computed,
+  Component, ChangeDetectionStrategy, effect, signal, input, ElementRef, output,
+  AfterViewInit, computed, viewChild,
 } from '@angular/core';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { BarcodeResultItem } from '../../core/models';
@@ -14,44 +14,44 @@ import { BarcodeSearchService } from '../../core/services/barcode-search.service
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductSearchDialogComponent implements AfterViewInit {
-  @Input()
-  public set barcode(value: BarcodeResultItem<true> | null) {
-    this._barcode = value;
+  public readonly barcode = input<BarcodeResultItem<true> | null>(null);
 
-    if (this._barcode && this._isViewInitialized && !this.dialog.nativeElement.open) {
-      this.searchBarcode(this._barcode.rawValue);
-    }
+  public readonly dialogClose = output();
+  protected readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+
+  public readonly isLoading = signal<boolean>(true);
+  public readonly searchResult = signal<string | null>(null);
+  public readonly hasResult = computed<boolean>(() => this.searchResult() !== null);
+
+  private readonly _isViewInitialized = signal<boolean>(false);
+
+  constructor(private readonly barcodeSarch: BarcodeSearchService) {
+    effect(() => {
+      const barcode = this.barcode();
+      if (barcode && this._isViewInitialized() && !this.dialog().nativeElement.open) {
+        this.searchBarcode(barcode.rawValue);
+      }
+    });
   }
 
-  @Output() public readonly dialogClose = new EventEmitter<void>();
-  @ViewChild('dialog') protected readonly dialog!: ElementRef<HTMLDialogElement>;
-
-  public isLoading = signal<boolean>(true);
-  public searchResult = signal<string | null>(null);
-  public hasResult = computed<boolean>(() => this.searchResult() !== null);
-
-  private _barcode: BarcodeResultItem<true> | null = null;
-  private _isViewInitialized = false;
-
-  constructor(private readonly barcodeSarch: BarcodeSearchService) {}
-
   public ngAfterViewInit(): void {
-    this._isViewInitialized = true;
+    this._isViewInitialized.set(true);
 
-    if (this._barcode) {
-      this.searchBarcode(this._barcode.rawValue);
+    const barcode = this.barcode();
+    if (barcode) {
+      this.searchBarcode(barcode.rawValue);
     }
   }
 
   public closeProductInfo(): void {
-    this.dialog.nativeElement.close();
+    this.dialog().nativeElement.close();
     this.isLoading.set(false);
     this.dialogClose.emit();
   }
 
   private searchBarcode(rawValue: string): void {
     this.isLoading.set(true);
-    this.dialog.nativeElement.showModal();
+    this.dialog().nativeElement.showModal();
     this.barcodeSarch.searchProductName(rawValue).subscribe({
       next: (productName) => {
         this.searchResult.set(productName);

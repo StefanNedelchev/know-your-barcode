@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, Component, Input, signal,
+  ChangeDetectionStrategy, Component, computed, effect, input, signal,
 } from '@angular/core';
 import { IDetectedBarcode } from 'barcode-detector-api-polyfill';
 import { BarcodeResultItem, BarcodeScannerResult } from '../../core/models';
@@ -13,13 +13,23 @@ import { ProductSearchDialogComponent } from '../product-search-dialog/product-s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarcodeResultsComponent {
-  @Input()
-  public set scannerResult(result: BarcodeScannerResult) {
-    this.barcodeResults.set(
-      result.barcodes.map((barcode) => this.parseBarcode(barcode)),
-    );
+  public readonly scannerResult = input.required<BarcodeScannerResult>();
 
-    if (result.instantSearch) {
+  public readonly barcodeResults = computed<BarcodeResultItem[]>(() =>
+    this.scannerResult().barcodes.map((barcode) => this.parseBarcode(barcode)));
+
+  public readonly selectedBarcode = signal<BarcodeResultItem<true> | null>(null);
+
+  private readonly _matrixFormats = new Set<string>(['aztec', 'data_matrix', 'pdf417', 'qr_code', 'unknown']);
+  private readonly _externalWindow = signal<Window | null>(null);
+
+  constructor() {
+    effect(() => {
+      const result = this.scannerResult();
+      if (!result.instantSearch) {
+        return;
+      }
+
       const searchableBarcode = this.barcodeResults().find((b) => b.searchable);
       if (searchableBarcode) {
         this.selectBarcode(searchableBarcode);
@@ -28,20 +38,13 @@ export class BarcodeResultsComponent {
 
       const linkBarcode = this.barcodeResults().find((b) => b.url && !b.url.startsWith('https://www.google'));
       if (linkBarcode) {
-        if (this._externalWindow?.closed) {
-          this._externalWindow = null;
+        if (this._externalWindow()?.closed) {
+          this._externalWindow.set(null);
         }
-
-        this._externalWindow ??= window.open(linkBarcode.url, '_blank');
+        this._externalWindow.update((w) => w ?? window.open(linkBarcode.url, '_blank'));
       }
-    }
+    }, { allowSignalWrites: true });
   }
-
-  public selectedBarcode = signal<BarcodeResultItem<true> | null>(null);
-  public barcodeResults = signal<BarcodeResultItem[]>([]);
-
-  private _matrixFormats = ['aztec', 'data_matrix', 'pdf417', 'qr_code', 'unknown'];
-  private _externalWindow: Window | null = null;
 
   public selectBarcode(barcode: BarcodeResultItem): void {
     if (barcode.searchable) {
@@ -52,7 +55,7 @@ export class BarcodeResultsComponent {
   private parseBarcode(barcode: IDetectedBarcode): BarcodeResultItem {
     const resultItem: BarcodeResultItem = {
       rawValue: barcode.rawValue,
-      searchable: !this._matrixFormats.includes(barcode.format),
+      searchable: !this._matrixFormats.has(barcode.format),
     };
 
     try {

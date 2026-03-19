@@ -1,6 +1,6 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy,
-  Output, ViewChild, signal,
+  ChangeDetectionStrategy, Component, effect, ElementRef, HostListener, input, OnDestroy,
+  output, viewChild, signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ICornerPoint } from 'barcode-detector-api-polyfill';
@@ -20,30 +20,19 @@ import { MediaDeviceService } from '../../core/services/media-device.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarcodeScannerComponent implements OnDestroy {
-  @ViewChild('videoElement') protected readonly videoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvasElement') protected readonly canvasElement!: ElementRef<HTMLCanvasElement>;
+  protected readonly videoElement = viewChild.required<ElementRef<HTMLVideoElement>>('videoElement');
+  protected readonly canvasElement = viewChild.required<ElementRef<HTMLCanvasElement>>('canvasElement');
 
-  @Input()
-  public set frameRate(fps: number) {
-    this._scanIntervalMs = Math.round(1000 / fps);
+  public readonly frameRate = input<number>(10);
 
-    if (this._scanInterval) {
-      clearInterval(this._scanInterval);
-      this._scanInterval = setInterval(
-        () => { this.scanBarcode() },
-        this._scanIntervalMs,
-      ) as unknown as number;
-    }
-  }
+  public readonly barcodeDetect = output<BarcodeScannerResult>();
 
-  @Output() public readonly barcodeDetect = new EventEmitter<BarcodeScannerResult>();
-
-  public canvasElementWidth = signal<number>(window.innerWidth);
-  public canvasElementHeight = signal<number>(window.innerHeight);
-  public isScanning = signal<boolean>(false);
-  public videoDevices = signal<MediaDeviceInfo[]>([]);
-  public activeStream = signal<MediaStream | null>(null);
-  public instantSearch = signal<boolean>(false);
+  public readonly canvasElementWidth = signal<number>(window.innerWidth);
+  public readonly canvasElementHeight = signal<number>(window.innerHeight);
+  public readonly isScanning = signal<boolean>(false);
+  public readonly videoDevices = signal<MediaDeviceInfo[]>([]);
+  public readonly activeStream = signal<MediaStream | null>(null);
+  public readonly instantSearch = signal<boolean>(false);
   public deviceSelectControl = new FormControl<MediaDeviceInfo | null>(null);
 
   private _windowResizeSubscription?: Subscription;
@@ -59,6 +48,18 @@ export class BarcodeScannerComponent implements OnDestroy {
     private readonly mediaDeviceService: MediaDeviceService,
   ) {
     this.listenForDeviceChanges();
+
+    effect(() => {
+      this._scanIntervalMs = Math.round(1000 / this.frameRate());
+
+      if (this._scanInterval) {
+        clearInterval(this._scanInterval);
+        this._scanInterval = setInterval(
+          () => { this.scanBarcode() },
+          this._scanIntervalMs,
+        ) as unknown as number;
+      }
+    });
   }
 
   @HostListener('document:visibilitychange')
@@ -89,7 +90,7 @@ export class BarcodeScannerComponent implements OnDestroy {
   }
 
   public calculateScannerDimensions(): void {
-    const { videoWidth, videoHeight } = this.videoElement.nativeElement;
+    const { videoWidth, videoHeight } = this.videoElement().nativeElement;
     this.canvasElementWidth.set(videoWidth);
     this.canvasElementHeight.set(videoHeight);
   }
@@ -204,16 +205,16 @@ export class BarcodeScannerComponent implements OnDestroy {
     this._ctx.lineWidth = this._lineWidth;
     this._ctx.strokeStyle = 'lime';
 
-    const detectedBarcodes = await this.barcodeDetectService.detect(this.videoElement.nativeElement);
+    const detectedBarcodes = await this.barcodeDetectService.detect(this.videoElement().nativeElement);
     detectedBarcodes.forEach(({ cornerPoints }) => this.drawBarcodeOutline(cornerPoints));
     this.barcodeDetect.emit({ barcodes: detectedBarcodes, instantSearch: this.instantSearch() });
   }
 
   private async startScan(): Promise<void> {
-    await this.videoElement.nativeElement.play();
+    await this.videoElement().nativeElement.play();
     await this.lockScreen();
 
-    this._ctx = this.canvasElement.nativeElement.getContext('2d', { willReadFrequently: true });
+    this._ctx = this.canvasElement().nativeElement.getContext('2d', { willReadFrequently: true });
 
     this._scanInterval = setInterval(
       () => { this.scanBarcode() },

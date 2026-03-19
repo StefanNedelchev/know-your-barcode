@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
 import { BarcodeScannerComponent } from './components/barcode-scanner/barcode-scanner.component';
@@ -13,7 +13,7 @@ import { BarcodeScannerResult } from './core/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  public scannerResult: BarcodeScannerResult = { barcodes: [], instantSearch: false };
+  public readonly scannerResult = signal<BarcodeScannerResult>({ barcodes: [], instantSearch: false });
 
   constructor(private readonly swUpdate: SwUpdate) { }
 

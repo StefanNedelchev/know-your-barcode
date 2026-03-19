@@ -261,7 +261,8 @@ describe('BarcodeScannerComponent', () => {
       await component.startScanner();
       await component.onVideoLoadedMetadata();
       discardPeriodicTasks();
-      component.frameRate = 3;
+      fixture.componentRef.setInput('frameRate', 3);
+      fixture.detectChanges();
       const newScanInterval = Math.round(1000 / 3);
       const closePathSpy = spyOn(CanvasRenderingContext2D.prototype, 'closePath');
 

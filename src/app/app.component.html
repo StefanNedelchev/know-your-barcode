@@ -1,2 +1,8 @@
-<app-barcode-scanner [frameRate]="5" (barcodeDetect)="scannerResult = $event" />
-<app-barcode-results class="barcode-results" [scannerResult]="scannerResult" />
+<app-barcode-scanner
+  [frameRate]="5"
+  (barcodeDetect)="scannerResult.set($event)"
+/>
+<app-barcode-results
+  class="barcode-results"
+  [scannerResult]="scannerResult()"
+/>
