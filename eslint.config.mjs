@@ -83,6 +83,7 @@ export default eslintTS.config(
       }],
       "@typescript-eslint/no-extraneous-class": "off",
       "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-unnecessary-type-arguments": "off",
       "@typescript-eslint/no-unused-vars": ["error", {
         caughtErrors: "none",
       }],
